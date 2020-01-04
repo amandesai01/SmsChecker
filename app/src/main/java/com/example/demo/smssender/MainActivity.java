@@ -1,5 +1,9 @@
 package com.example.demo.smssender;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -30,6 +34,20 @@ public class MainActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         etPhone = findViewById(R.id.etPhone);
 
+        int res = ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+        if(res == PackageManager.PERMISSION_GRANTED){
+            setOnclick();
+        }
+        else{
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 123);
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 123 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            setOnclick();
+        }
     }
 }
